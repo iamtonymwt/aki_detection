@@ -1,0 +1,8 @@
+pandas
+scikit-learn
+numpy
+tqdm
+xgboost
+requests
+pd
+prometheus_client

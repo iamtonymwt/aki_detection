@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-alert-rules
+  namespace: 
+data:
+  alerting-rules.yml: |
+    groups:
+    - name: aki-alerts
+      rules:
+      - alert: PageFailed
+        expr: increase(pages_sent_failed_total[1m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "page failed"
+          description: "Page failed (> 0 in the last minute)."
+      - alert: ParseFailed
+        expr: increase(messages_parsed_failed_total[1m]) > 0
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Parse failed"
+          description: "Parse failed (> 0 in the last minute)."
+      - alert: SocketFailed
+        expr: increase(start_mllp_listener_failure[5m]) > 0
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Socket Connection failed"
+          description: "Connection to MLLP server failed."
+      - alert: HighOverallLatency
+        expr: overall_latency > 2
+        for: 1m
+        labels:
+          severity: critical
+        annotations:
+          summary: High overall latency detected
+          description: "Overall latency is higher than 2 seconds (current value: {{ $value }}s)"
+      
